@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="${title}"></title>
+<style type="text/css">
+	table {
+	border-collapse: collapse; 
+}
+</style>
+</head>
+<body>
+	<h1 align="center">Bugs present in project: <span th:text="${project.getName}"></span></h1>
+		<h3>Project Id:  [[${projectId}]]</h3><!-- so this and the bellow thing is same-->
+		<h3>Project Description: [[${project.getDescription()}]]</h3>
+		<br>
+		<table border="2px">
+		<thead>
+			<tr>
+				<td>Bug Name</td>
+				<td>Bug Description</td>
+				<td>Severity</td>
+				<td>View</td>
+				<td sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">Assign</td>
+			</tr>
+		</thead>
+		<tr th:each="bug : ${bugList}">
+			<td th:text="${bug.name}">Bug name</td>
+			<td th:text="${bug.description}">Bug description</td>
+			<td th:text="${bug.severity}">Severity</td>
+			<td><a th:href="@{'/bugs/' + ${bug.id}+'/view'}">View Details</a></td>
+			<td sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+				<a th:href="@{'/bug/'+${bug.id}+'/assignbug'}">Assign center</a>
+			</td>
+		</tr>
+	</table>
+
+	<h1><a th:href="@{'/project/'+${projectId}+'/bugs/add'}">Report a new Bug</a></h1>
+</body>
+</html>

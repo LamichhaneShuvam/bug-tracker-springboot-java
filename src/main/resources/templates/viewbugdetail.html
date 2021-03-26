@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head">
+</head>
+<style>
+	textarea{
+		resize: none;
+	}
+</style>
+<body>
+	<h3 align="center">[[${message}]]</h3>
+	<h1 align="center">Bug Detail center</h1>
+	<table border="2px">
+		<tr>
+			<td>Picture</td>
+			<td>File Name</td>
+			<td>Description</td>
+			<td>Size</td>
+			<td>Download</td>
+		</tr>
+		<tr th:each="file : ${listFiles}">
+			<td>
+			<img th:src="@{${'/file/display/'+ file.id}}" 
+                class="card img-fluid" style="width:300px" alt=""/>
+			</td>
+			<td>[[${file.name}]]</td>
+			<td>[[${file.description}]]</td>
+			<td>[[${file.size}]] bytes</td>
+			<td><a th:href="@{'/download?id=' + ${file.id}}">Download</a></td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<form th:action="@{'/upload/'+${bugId}}" method="post" enctype="multipart/form-data">
+		<h3>upload your file</h3>
+			<textarea name="description" placeholder="description" rows="6" cols="50" required></textarea>
+			<br>
+			<input type="file" name="file" required>
+			<br>
+			<input type="submit" value="Submit">
+	</form>
+	note: Preview of images will only be shown.
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: html_head">
+<body>
+	<!--Wrapper start-->
+	<div class="d-flex" id="wrapper">
+		<div th:replace="fragments :: nav_side"></div>
+    	<div id="page-content-wrapper">
+    		<nav th:replace="fragments :: nav_top"></nav>
+			
+			<div class="container-fluid">
+        		<div class="row">
+          			<div class="col-sm">
+            			<div id="donutchart"></div>
+          			</div>
+          			<div class="col-sm" id="top-users">
+            			<div class="card text-white bg-success mb-3" style="max-width: 20rem;">
+              				<div class="card-header">Top List</div>
+              				<div class="card-body">
+                				<h5 class="card-title">Top Bug Reporter: Kamlesh</h5>
+                				<h5 class="card-title">Top Bug Solver: Ramesh</h5>
+              				</div>
+            			</div>
+          			</div>
+        		</div>
+      		</div>
+      		
+      		<div class="container-fluid">
+        		<h1 class="mt-4">Status</h1>
+        		<p>Total number of Projects: <span th:text="${projectCount}"></span></p>
+        		<p>Total number of Bugs: <span th:text="${bugCount}"></span></p>
+        		<p>Total number of Downloadable Content: 100</p>
+        		<p>Total number of Messages: 500</p>
+      		</div>
+      		
+      		
+    	</div>
+	</div>
+	<!--Wrapper end-->
+    
+    <div th:replace="fragments :: all_scripts"></div>
+</body>
+</html>

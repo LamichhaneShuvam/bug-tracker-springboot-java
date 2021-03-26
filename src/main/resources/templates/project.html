@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: html_head"></head>
+<body>
+	  <div class="d-flex" id="wrapper">
+	  	<div th:replace="fragments :: nav_side"></div>
+	  	
+	  	<div id="page-content-wrapper">
+	  		<nav th:replace="fragments :: nav_top"></nav>
+	  		<div class="container-fluid">
+		  		<table class="table table-striped table-bordered  table-hover" style="max-width: 90%; margin-top: 20px;">
+					<thead class="table-dark">
+						<tr>
+							<td>Project Id</td>
+							<td>Project Name</td>
+							<td>Project Description</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="project : ${projectList}">
+							<td th:text="${project.id}" style="width: 100px;">project Id</td>
+							<td th:text="${project.name}" style="width: 200px;">project name</td>
+							<td th:text="${project.description}" style="width: 500px;">project description</td>
+							<td style="width:200px;">
+								<a th:href="@{'/project/'+${project.id}+'/bugs'}" style="text-decoration: none;">
+									<span class="material-icons" data-bs-toggle="tooltip" title="View" style="color: green;">
+			                      		remove_red_eye
+			                    	</span>
+								</a>
+								<a th:href="@{'/project/'+${project.id}+'/assigntask'}" style="text-decoration: none;" sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+									<span class="material-icons" data-bs-toggle="tooltip" title="Assign" style="color: orange;">
+										assignment_ind
+									</span>
+								</a>
+						
+							</td>
+						</tr>
+					</tbody>
+				</table>	
+	  		</div>
+		<h3 sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+			<a th:href="@{/project/add}">insert project</a>
+		</h3>
+	  	</div>
+	  </div>
+	<div th:replace="fragments :: all_scripts"></div>
+</body>
+</html>

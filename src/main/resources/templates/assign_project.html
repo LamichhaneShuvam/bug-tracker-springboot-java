@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Assign task</title>
+</head>
+<body>
+		<h3>Assigned users:</h3>
+		<table id="table" border="2px">
+		<thead>
+			<tr>
+				<td>Id</td>
+				<td>User Name</td>
+				<td>user lastName</td>
+				<td>Role</td>
+				<td>Email</td>
+			</tr>
+		</thead>
+		<tr th:each="user : ${assignedUserList}">
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.firstName}">Bug name</td>
+			<td th:text="${user.lastName}">Bug description</td>
+			<td th:text="${user.role}">Bug description</td>
+			<td th:text="${user.email}">Bug description</td>
+		</tr>
+	</table>
+	
+	<br><br><br>
+	
+			<h3>Give authority</h3>
+		<table id="table" border="2px">
+		<thead>
+			<tr>
+				<td>Id</td>
+				<td>User Name</td>
+				<td>user lastName</td>
+				<td>Role</td>
+				<td>Email</td>
+				<td>Give Authority</td>
+			</tr>
+		</thead>
+		<tr th:each="user : ${remainingUser}">
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.firstName}">Bug name</td>
+			<td th:text="${user.lastName}">Bug description</td>
+			<td th:text="${user.role}">Bug description</td>
+			<td th:text="${user.email}">Bug description</td>
+			<td align="center">
+				<a th:href="@{'/project/'+${project.id}+'/assign/'+${user.id}}">Give</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

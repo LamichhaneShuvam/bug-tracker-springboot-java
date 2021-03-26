@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head"></head>
+<body>
+	<h1 align="center">Report a new bug under project: <span th:text="${project.getName}"></span></h1>
+	<br>
+	<form th:action="@{'/project/'+${projectId}+'/bugs/save'}">
+		<input type="text" name="name" placeholder="Bug Name" required><br>
+		<textarea name="description" placeholder="description" rows="6" cols="50" required></textarea><br>
+		<label>Severity: </label>
+		<select name="severity">
+  			<option value="normal">Normal</option>
+  			<option value="moderate">Moderate</option>
+  			<option value="critical">Critical</option>
+		</select><br>
+		<input type="submit" value="submit">
+	</form>
+</body>
+</html>

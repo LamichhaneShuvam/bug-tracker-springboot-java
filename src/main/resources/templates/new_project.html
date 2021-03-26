@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>[[${title}]]</title>
+</head>
+<body>
+	<h1 align="center">New project section</h1>
+	<form th:action="@{'/project/save'}">
+		<input type="text" name="name" placeholder="Project Name" required><br>
+		<textarea name="description" placeholder="description" rows="6" cols="50" required></textarea><br>
+		<input type="submit" value="submit">
+	</form>
+</body>
+</html>
