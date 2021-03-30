@@ -2,7 +2,7 @@
 #### V1.5
 ###### Forgot to add V1 :metal:
 
-### Added Functionality :tick:
+### Added Functionality
     * Review section that acts like messages
     * Users role assigning
 
