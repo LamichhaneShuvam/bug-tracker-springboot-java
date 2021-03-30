@@ -27,8 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lymn.bugTracker.model.File;
+import com.lymn.bugTracker.model.Message;
 import com.lymn.bugTracker.repository.BugRepository;
 import com.lymn.bugTracker.repository.FileRepository;
+import com.lymn.bugTracker.repository.MessageRepository;
 import com.lymn.bugTracker.repository.ModifiedRepository;
 import com.lymn.bugTracker.service.BugService;
 
@@ -44,22 +46,28 @@ public class FileController {
 	ModifiedRepository modifiedRepository;
 	
 	@Autowired
+	MessageRepository messageRepository;
+	
+	@Autowired
 	BugService bugService;
 	
 	@RequestMapping("/bugs/{id}/view")
 	public String view(@PathVariable(name="id")Long id, Model model, HttpSession httpSession) {
-		//add the code for checking autority of the user like done in BugController
+		//add the code for checking authority of the user like done in BugController
 		
 		if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
 			List<File> listFiles = fileRepository.findByBugId(id);
 			model.addAttribute("listFiles",listFiles);
 			model.addAttribute("bugId",id);
+			List<Message> messages = messageRepository.findByBugId(id);			model.addAttribute("messages", messages);
 			return "viewbugdetail";
 			
 		}else if(bugService.isPresent(id , (Long)httpSession.getAttribute("uId"))) {
 			List<File> listFiles = fileRepository.findByBugId(id);
 			model.addAttribute("listFiles",listFiles);
 			model.addAttribute("bugId",id);
+			List<Message> messages = messageRepository.findByBugId(id);
+			model.addAttribute("messages", messages);
 			return "viewbugdetail";
 		}
 		else {

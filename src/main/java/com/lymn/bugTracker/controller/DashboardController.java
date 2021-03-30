@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lymn.bugTracker.dto.UserDto;
+import com.lymn.bugTracker.repository.BugRepository;
+import com.lymn.bugTracker.repository.FileRepository;
 import com.lymn.bugTracker.repository.UserRepository;
 import com.lymn.bugTracker.service.DashboardService;
 
@@ -22,6 +24,10 @@ public class DashboardController {
 	
 	@Autowired
 	private UserDto userDto;
+	@Autowired
+	FileRepository fileRepository;
+	@Autowired
+	BugRepository bugRepository;
 	
 	
 	@RequestMapping(path = "/dashboard")
@@ -30,6 +36,10 @@ public class DashboardController {
 		modelAndView.setViewName("dashboard");
 		modelAndView.addObject("countProject");
 		modelAndView.addObject("bugCount", dashboardService.bugCount());
+		modelAndView.addObject("critical", bugRepository.countBySeverity("critical"));
+		modelAndView.addObject("moderate", bugRepository.countBySeverity("moderate"));
+		modelAndView.addObject("normal", bugRepository.countBySeverity("normal"));
+		modelAndView.addObject("downloadable", fileRepository.count());
 		modelAndView.addObject("projectCount", dashboardService.projectCount());
 		modelAndView.addObject("title","Dashboard|BugTracker");
 		if(httpSession.getAttribute("role")==null) {

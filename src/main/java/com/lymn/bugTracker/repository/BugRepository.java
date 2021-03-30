@@ -9,5 +9,6 @@ import com.lymn.bugTracker.model.Bug;
 public interface BugRepository extends JpaRepository<Bug, Long>{
 
 	List<Bug> findByProjectId(Long id);
+	Long countBySeverity(String severity);
 
 }

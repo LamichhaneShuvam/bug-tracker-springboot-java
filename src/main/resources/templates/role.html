@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head">
 </head>
 <body>
-	role section
+	<h2>For user [[${userId}]]</h2>
+	<form th:action="@{'/user/'+${userId}+'/role/save'}">
+		<select name="role">
+			<option value="ADMIN">Admin</option>
+			<option value="MANAGER">Manager</option>
+			<option value="DEVELOPER">Developer</option>
+			<option value="TESTER">Tester</option>
+		</select>
+		<input type="submit" value="Submit">
+	</form>
 </body>
 </html>

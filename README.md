@@ -2,15 +2,17 @@
 #### V1.5
 ###### Forgot to add V1 :metal:
 
+### Added Functionality :tick:
+    * Review section that acts like messages
+    * Users role assigning
 
 ### Remaining Functionality
     * Complete and incomplete section in Bug
     * Add role addition in user registration
-    * Add user area where users can be promoted or demoted
     * Project and bug deletion option
     * Design completion remaining
     * Custom login and logout
 
-*ps-* **I just learnt to format README.md**
+*ps-* **Third Commit**
 
 ***Shuvam*** :rocket:

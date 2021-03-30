@@ -15,7 +15,7 @@
 							<td>Project Id</td>
 							<td>Project Name</td>
 							<td>Project Description</td>
-							<td>Action</td>
+							<td align="center">Action</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -23,7 +23,7 @@
 							<td th:text="${project.id}" style="width: 100px;">project Id</td>
 							<td th:text="${project.name}" style="width: 200px;">project name</td>
 							<td th:text="${project.description}" style="width: 500px;">project description</td>
-							<td style="width:200px;">
+							<td style="width:200px;" align="center">
 								<a th:href="@{'/project/'+${project.id}+'/bugs'}" style="text-decoration: none;">
 									<span class="material-icons" data-bs-toggle="tooltip" title="View" style="color: green;">
 			                      		remove_red_eye

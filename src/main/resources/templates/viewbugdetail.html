@@ -3,14 +3,14 @@
 <head th:replace="fragments :: html_head">
 </head>
 <style>
-	textarea{
-		resize: none;
-	}
+textarea {
+	resize: none;
+}
 </style>
 <body>
 	<h3 align="center">[[${message}]]</h3>
 	<h1 align="center">Bug Detail center</h1>
-	<table border="2px">
+	<table class="table">
 		<tr>
 			<td>Picture</td>
 			<td>File Name</td>
@@ -19,10 +19,8 @@
 			<td>Download</td>
 		</tr>
 		<tr th:each="file : ${listFiles}">
-			<td>
-			<img th:src="@{${'/file/display/'+ file.id}}" 
-                class="card img-fluid" style="width:300px" alt=""/>
-			</td>
+			<td><img th:src="@{${'/file/display/'+ file.id}}"
+				class="card img-fluid" style="width: 300px" alt="" /></td>
 			<td>[[${file.name}]]</td>
 			<td>[[${file.description}]]</td>
 			<td>[[${file.size}]] bytes</td>
@@ -31,15 +29,34 @@
 	</table>
 	<br>
 	<br>
-	<form th:action="@{'/upload/'+${bugId}}" method="post" enctype="multipart/form-data">
+	<form th:action="@{'/upload/'+${bugId}}" method="post"
+		enctype="multipart/form-data">
 		<h3>upload your file</h3>
-			<textarea name="description" placeholder="description" rows="6" cols="50" required></textarea>
-			<br>
-			<input type="file" name="file" required>
-			<br>
-			<input type="submit" value="Submit">
+		<textarea name="description" placeholder="description" rows="6"
+			cols="50" required></textarea>
+		<br> <input type="file" name="file" required> <br> <input
+			type="submit" value="Submit">
 	</form>
 	note: Preview of images will only be shown.
+
+	<h1>Messages</h1>
+	<table class="table">
+		<tr>
+			<td>name</td>
+			<td>Message</td>
+			<td>time</td>
+		</tr>
+		<tr th:each="message : ${messages}">
+			<td>[[${message.user.firstName}]]</td>
+			<td>[[${message.description}]]</td>
+			<td>[[${message.uploadTime}]]</td>
+		</tr>
+	</table>
+	<form th:action="@{'/bug/'+${bugId}+'/message/save'}">
+		<textarea name="description" placeholder="message" rows="6" cols="50"
+			required></textarea>
+		<input type="submit" value="Submit">
+	</form>
 
 </body>
 </html>

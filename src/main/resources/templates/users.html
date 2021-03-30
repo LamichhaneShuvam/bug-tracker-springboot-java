@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head"></head>
 <body>
-	list of users
+	<table class="table">
+		<thead>
+			<tr>
+				<td>Id</td>
+				<td>User Name</td>
+				<td>User LastName</td>
+				<td>Role</td>
+				<td>Action</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${users}">
+				<td th:text="${user.id}"></td>
+				<td th:text="${user.firstName}">name</td>
+				<td th:text="${user.lastName}">lname</td>
+				<td th:text="${user.role}">role</td>
+				<td align="center">
+					<a th:href="@{'/user/'+${user.id}+'/role/'}">Change</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

@@ -186,4 +186,65 @@ public class ModifiedRepository {
 				.getSingleResult();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<ProjectViewDto> viewUserByRole(){
+		List<ProjectViewDto> userList = new ArrayList<ProjectViewDto>();
+		List<Object[]> ob1 = entityManager.createNativeQuery("SELECT user.id, user.first_name, user.last_name, user.email, role.name from user"
+				+ " join users_roles on users_roles.user_id = user.id"
+				+ " join role on role.role_id = users_roles.role_id"
+				+ " where not role.name = \"ADMIN\"").getResultList();
+		for(Object[] item : ob1) {
+			ProjectViewDto projectViewDto = new ProjectViewDto();
+			projectViewDto.setId(((BigInteger)item[0]).longValue());
+			projectViewDto.setFirstName((String)item[1]);
+			projectViewDto.setLastName((String) item[2]);
+			projectViewDto.setEmail((String)item[3]);
+			projectViewDto.setRole((String)item[4]);
+			userList.add(projectViewDto);		
+		}
+		return userList;
+	}
+	
+	@Transactional
+	public boolean userRolePresent(Long userId) {
+		return entityManager.createNativeQuery("SELECT * FROM users_roles where user_id = ?")
+				.setParameter(1, userId).getResultList().isEmpty();
+	}
+	
+	@Transactional
+	public void AssignRole(Long userId, Long roleId) {
+		entityManager.createNativeQuery("INSERT INTO users_roles (user_id, role_id) VALUES (?,?)")
+	      .setParameter(1, userId)
+	      .setParameter(2, roleId)
+	      .executeUpdate();
+	}
+	
+	@Transactional
+	public void UpdateRole(Long userId, Long roleId) {
+		entityManager.createNativeQuery("UPDATE users_roles SET role_id = ?"
+				+ "where user_id = ?")
+	      .setParameter(1, roleId)
+	      .setParameter(2, userId)
+	      .executeUpdate();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<ProjectViewDto> viewEditUserRoles(){
+		List<ProjectViewDto> userList = new ArrayList<ProjectViewDto>();
+		List<Object[]> ob1 = entityManager.createNativeQuery("SELECT user.id, user.first_name, user.last_name, user.email, role.name from user"
+				+ " left outer join users_roles on users_roles.user_id = user.id"
+				+ " left join role on role.role_id = users_roles.role_id").getResultList();
+		for(Object[] item : ob1) {
+			ProjectViewDto projectViewDto = new ProjectViewDto();
+			projectViewDto.setId(((BigInteger)item[0]).longValue());
+			projectViewDto.setFirstName((String)item[1]);
+			projectViewDto.setLastName((String) item[2]);
+			projectViewDto.setEmail((String)item[3]);
+			projectViewDto.setRole((String)item[4]);
+			userList.add(projectViewDto);		
+		}
+		return userList;
+	}
 }
