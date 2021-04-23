@@ -12,3 +12,13 @@ html {
 html::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
+table.message{
+	overflow-y:scroll; 
+	height:200px; 
+	display:block;  
+}
+th.fixed{
+	top: 0;
+    z-index: 2;
+    position: sticky;
+}

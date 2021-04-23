@@ -1,6 +1,7 @@
 package com.lymn.bugTracker.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import com.lymn.bugTracker.dto.UserDto;
 import com.lymn.bugTracker.model.Bug;
 import com.lymn.bugTracker.model.Project;
 import com.lymn.bugTracker.repository.ModifiedRepository;
+import com.lymn.bugTracker.repository.UserRepository;
 import com.lymn.bugTracker.service.BugService;
 import com.lymn.bugTracker.service.ProjectService;
 
@@ -27,6 +29,8 @@ public class BugController {
 	ProjectService projectService;
 	@Autowired
 	ModifiedRepository modifiedRepository;
+	@Autowired
+	UserRepository userRepository;
 	@Autowired
 	UserDto userDto;
 	
@@ -48,6 +52,7 @@ public class BugController {
 				return "bug";	
 		}
 		else {
+			model.addAttribute("title", "Unauthorized");
 			return "403";
 		}
 
@@ -60,12 +65,13 @@ public class BugController {
 			httpSession = userDto.primaryInit(authentication, httpSession);
 		}
 		if(projectService.isPresent(id , (Long)httpSession.getAttribute("uId"), (String)httpSession.getAttribute("role"))){
-			System.out.println("hello 1");
+			//System.out.println("hello 1");
 			model.addAttribute("project",projectService.getProjectById(id));
 			model.addAttribute("projectId", id);
 			model.addAttribute("title","New Bug");
 			return "new_bug";
 		}else {
+			model.addAttribute("title", "Unauthorized");
 			return "403";
 		}
 	}
@@ -79,20 +85,48 @@ public class BugController {
 			if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
 				Project project = projectService.getProjectById(id);
 				bug.setProject(project);
+				bug.setReportTime(new Date());
+				bug.setStatus("ongoing");
+				//who set the code
+				bug.setUser(userRepository.findById((Long) httpSession.getAttribute("uId")).get());
 				bugService.save(bug);
 				return "redirect:/project/"+id+"/bugs";
 			}//combine if and else if to one using " ->or<- "
 			else if(projectService.isPresent(id , (Long)httpSession.getAttribute("uId"), (String)httpSession.getAttribute("role"))){
 				Project project = projectService.getProjectById(id);
 				bug.setProject(project);
+				bug.setReportTime(new Date());
+				bug.setStatus("ongoing");
+				//who set the code
+				bug.setUser(userRepository.findById((Long) httpSession.getAttribute("uId")).get());
 				bugService.save(bug);
 				return "redirect:/project/"+id+"/bugs";
-			}else {
-				return "403";
 			}
-		} else {
-			return "400";
 		}
+			model.addAttribute("title", "Invalid Request");
+			return "400";
 		
+	}
+	@RequestMapping("project/{pid}/bug/{id}/complete")
+	public String bugCompleted(@PathVariable(name="id")Long bugId,@PathVariable(name="pid") Long projectId
+								, Model model,HttpSession httpSession) {
+		if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
+			modifiedRepository.bugStatus(bugId, "completed");
+			return "redirect:/project/"+projectId+"/bugs";
+		}
+		else {
+			model.addAttribute("title", "Unauthorized");
+			return "403";
+		}
+	}
+	
+	@RequestMapping("project/{pid}/bug/{id}/delete")
+	public String bugDelete(@PathVariable(name = "pid") Long projectId, @PathVariable(name="id") Long bugId, HttpSession httpSession, Model model) {
+		if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
+			modifiedRepository.bugDelete(bugId);
+			return "redirect:/project/"+projectId+"/bugs";
+		}
+		model.addAttribute("title","Unauthorized");
+		return "403";
 	}
 }

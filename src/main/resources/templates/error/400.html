@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
+<head th:replace="fragments :: html_head">
 <body>
-	Bad Request Invalid Request or Invalid Input
+	<div class="container">
+		<h1 class="align-middle">400 error</h1>
+		<h5 class="align-middle">Back to Home</h5>
+		<a th:href="@{/dashboard}" class="align-middle">
+			<span class="material-icons">home</span>
+		</a>
+	</div>
 	
-	<a th:href="@{/dashboard}">Back to dash</a>
 </body>
 </html>

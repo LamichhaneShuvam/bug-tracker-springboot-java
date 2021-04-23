@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
-<title>BugTracker</title>
-</head>
+<head th:replace="fragments :: html_head">
 <body>
 	<h1 align="center">Welcome to the Application</h1>
-	<a th:href="@{/dashboard}">Login</a>
+	<div class="container" align="center">
+		<a th:href="@{/dashboard}">Login</a>
+	</div>
 </body>
 </html>

@@ -41,7 +41,9 @@ public class DashboardController {
 		modelAndView.addObject("normal", bugRepository.countBySeverity("normal"));
 		modelAndView.addObject("downloadable", fileRepository.count());
 		modelAndView.addObject("projectCount", dashboardService.projectCount());
-		modelAndView.addObject("title","Dashboard|BugTracker");
+		modelAndView.addObject("messages",dashboardService.messageCount());
+		
+		modelAndView.addObject("title","Bug Tracker");
 		if(httpSession.getAttribute("role")==null) {
 			httpSession = userDto.primaryInit(authentication, httpSession);	
 		}

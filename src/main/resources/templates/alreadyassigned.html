@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head">
 <body>
-project or bug already assigned
+	<div class="container">
+		<h1 class="align-middle">Project or Bug Already Assigned</h1>
+		<h5 class="align-middle">Back to project</h5>
+		<a th:href="@{/project}" class="align-middle">
+			<span class="material-icons">work</span>
+		</a>
+	</div>
 </body>
 </html>

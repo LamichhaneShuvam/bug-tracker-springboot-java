@@ -53,24 +53,27 @@ public class FileController {
 	
 	@RequestMapping("/bugs/{id}/view")
 	public String view(@PathVariable(name="id")Long id, Model model, HttpSession httpSession) {
-		//add the code for checking authority of the user like done in BugController
-		
+		model.addAttribute("title","View Bug Detail");
 		if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
 			List<File> listFiles = fileRepository.findByBugId(id);
 			model.addAttribute("listFiles",listFiles);
 			model.addAttribute("bugId",id);
-			List<Message> messages = messageRepository.findByBugId(id);			model.addAttribute("messages", messages);
+			model.addAttribute("bug",bugRepository.findById(id).get());
+			List<Message> messages = messageRepository.findByBugId(id);			
+			model.addAttribute("messages", messages);
 			return "viewbugdetail";
 			
 		}else if(bugService.isPresent(id , (Long)httpSession.getAttribute("uId"))) {
 			List<File> listFiles = fileRepository.findByBugId(id);
 			model.addAttribute("listFiles",listFiles);
 			model.addAttribute("bugId",id);
+			model.addAttribute("bug",bugRepository.findById(id).get());
 			List<Message> messages = messageRepository.findByBugId(id);
 			model.addAttribute("messages", messages);
 			return "viewbugdetail";
 		}
 		else {
+			model.addAttribute("title", "Unauthorized");
 			return "403";
 		}
 	}
@@ -81,8 +84,7 @@ public class FileController {
 	public String uploadFile(@PathVariable(name="id") Long id,
 			@RequestParam(value = "file", required = false) MultipartFile multipartFile, 
 			RedirectAttributes redirectAttributes,
-			@RequestParam("description") String description, HttpSession httpSession) throws IOException {
-		//set head name if needed
+			@RequestParam("description") String description, HttpSession httpSession, Model model) throws IOException {
 		
 		if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -109,6 +111,7 @@ public class FileController {
 			redirectAttributes.addFlashAttribute("message","the file has been successfully uploaded");
 			return "redirect:/bugs/"+id+"/view";
 		}else {
+			model.addAttribute("title", "Unauthorized");
 			return "403";
 		}
 	}
@@ -145,7 +148,7 @@ public class FileController {
 			response.getOutputStream().write(file.get().getContent());
 			response.getOutputStream().close();
 		}else {
-			byte[] contentBlob = modifiedRepository.findImage(1l);//documentphoto);
+			byte[] contentBlob = modifiedRepository.findImage(1l);
 			response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
 			response.getOutputStream().write(contentBlob);
 			response.getOutputStream().close();

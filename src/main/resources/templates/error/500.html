@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head">
 <body>
 	Internal Server error. I'm 100 percent sure that you have miss typed template name while sending through the controller
+		<div class="container">
+		<h1 class="align-middle">500 Internal server error hint:- templating </h1>
+		<h5 class="align-middle">Back to Home</h5>
+		<a th:href="@{/dashboard}" class="align-middle">
+			<span class="material-icons">home</span>
+		</a>
+	</div>
 </body>
 </html>

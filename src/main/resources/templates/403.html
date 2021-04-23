@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
-<title>Unauthorized Access</title>
-</head>
+<head th:replace="fragments :: html_head">
 <body>
-	<h1>Unauthorized Access</h1>
-	<a th:href="@{/dashboard}">Go back to Dash board</a>
+		<div class="container">
+		<h1 class="align-middle">403 Unauthorized Access</h1>
+		<h5 class="align-middle">Back to Home</h5>
+		<a th:href="@{/dashboard}" class="align-middle">
+			<span class="material-icons">home</span>
+		</a>
+	</div>
 </body>
 </html>

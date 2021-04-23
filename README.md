@@ -1,18 +1,26 @@
 # Bug Tracker
-#### V1.5
+#### V2
 ###### Forgot to add V1 :metal:
 
-### Added Functionality :tick:
+### Added Functionality
     * Review section that acts like messages
     * Users role assigning
+    * Design completion
+    * Project and bug Status
+        * Bug
+            * ongoing
+            * completed
+        * Project
+            * ongoing
+            * obsolete
+        * Both have deletion option
+    * Add role addition in user registration 
 
 ### Remaining Functionality
     * Complete and incomplete section in Bug
-    * Add role addition in user registration
-    * Project and bug deletion option
-    * Design completion remaining
+    * Add proper index page
     * Custom login and logout
 
-*ps-* **Third Commit**
+*ps-* **Fourth Commit**
 
 ***Shuvam*** :rocket:

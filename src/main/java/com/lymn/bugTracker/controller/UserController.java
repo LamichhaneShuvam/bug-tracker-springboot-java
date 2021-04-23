@@ -25,7 +25,8 @@ public class UserController {
 	
 	@GetMapping("/register")
 	public String showRegister(Model model) {
-		model.addAttribute("user", new User()); 
+		model.addAttribute("user", new User());	
+		model.addAttribute("title","Register User");
 		return "register_form";
 	}
 	
@@ -35,32 +36,28 @@ public class UserController {
 		String encodedPass = passencode.encode(user.getPassword());
 		user.setPassword(encodedPass);
 		userRepository.save(user);
-		return "redirect:/dashboard";
+		return "redirect:/users";
 	}
-//	@RequestMapping("/user/{id}")
-//	public String getrole(@PathVariable("id")Long id) {
-//		User user = userRepository.findById(id).get();
-//		for(Role role : user.getRoles()) {
-//			System.out.print(role.getName());
-//		}
-//		return "/";
-//	}
 	
 	@RequestMapping("/users")
 	public String showUsers(Model model, HttpSession httpSession) {
+		model.addAttribute("title", "Users");
 		if(httpSession.getAttribute("role").equals("ADMIN")) {
 			model.addAttribute("users", modifiedRepository.viewEditUserRoles());	
 			return "users";
 		}
+		model.addAttribute("title", "Unauthorized");
 		return "403";
 	}
 	@RequestMapping("/user/{id}/role")
 	public String showRoleChange(@PathVariable("id") Long id, Model model, HttpSession httpSession) {
+		model.addAttribute("title", "Role Manager");
 		if(httpSession.getAttribute("role").equals("ADMIN")) {
 			model.addAttribute("users", modifiedRepository.viewUserByRole());
 			model.addAttribute("userId",id);
 			return "role";
 		}
+		model.addAttribute("title", "Unauthorized");
 		return "403";
 	}
 	

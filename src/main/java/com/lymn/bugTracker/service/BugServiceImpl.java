@@ -20,8 +20,8 @@ public class BugServiceImpl implements BugService {
 
 	@Override
 	public List<Bug> getBugByProjectId(Long id){
-		return BugRepository.findByProjectId(id);	
-		
+		//return BugRepository.findByProjectId(id);
+		return modifiedRepository.findBugByStatus(id, "ongoing");
 	}
 	
 	@Override

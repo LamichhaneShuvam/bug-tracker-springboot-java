@@ -31,7 +31,7 @@ public class MessageController {
 
 	@RequestMapping("bug/{id}/message/save")
 	public String saveMessage(@PathVariable("id") Long id,@RequestParam("description") String description, Model model, HttpSession httpSession) {
-		// bugIsPresent(Long bugId, Long userId)
+		
 		if(httpSession.getAttribute("role").equals("ADMIN") || httpSession.getAttribute("role").equals("MANAGER")) {
 			Message message = new Message();
 			message.setBug(bugRepository.findById(id).get());
@@ -50,6 +50,7 @@ public class MessageController {
 				messageRepository.save(message);
 				return "redirect:/bugs/"+id+"/view";
 			}
+			model.addAttribute("title", "Unauthorized");
 			return "403";
 		}
 	}

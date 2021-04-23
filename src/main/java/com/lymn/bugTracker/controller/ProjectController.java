@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,7 +28,7 @@ public class ProjectController {
 	UserRepository userRepository;
 	
 	@Autowired
-	ModifiedRepository modifiedRepository; //move the code to the service class on time
+	ModifiedRepository modifiedRepository;
 	
 	@Autowired
 	UserDto userDto;
@@ -38,9 +39,9 @@ public class ProjectController {
 		if(httpSession.getAttribute("role") == null) {
 			httpSession = userDto.primaryInit(authentication, httpSession);
 			modelAndView.addObject("uId",httpSession.getAttribute("uId"));
-			modelAndView.addObject("role",httpSession.getAttribute("role")); //remove on chance
+			modelAndView.addObject("role",httpSession.getAttribute("role"));
 		}else {
-			modelAndView.addObject("role",httpSession.getAttribute("role"));	//remove on chance		
+			modelAndView.addObject("role",httpSession.getAttribute("role"));		
 			modelAndView.addObject("uId",httpSession.getAttribute("uId"));
 		}
 		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
@@ -56,16 +57,46 @@ public class ProjectController {
 	}
 	
 	@RequestMapping("/project/add")
-	public String addProject(Model model) {
-		model.addAttribute("title","New Project");
-		return "new_project";
+	public String addProject(Model model, HttpSession httpSession) {
+		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
+			model.addAttribute("title","New Project");
+			return "new_project";	
+		}else {
+			model.addAttribute("title","Unauthorized");
+			return "403";
+		}
 	}
 	
 	@RequestMapping("/project/save")
-	public String newProject(Project project) {
-		projectService.save(project);
-		return "redirect:/project";
+	public String newProject(Project project, HttpSession httpSession, Model model) {
+		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
+			project.setStatus("ongoing");
+			projectService.save(project);
+			return "redirect:/project";			
+		} else {
+			model.addAttribute("title", "Unauthorized");
+			return "403";
+		}
+	}
+	@RequestMapping("/project/{id}/obsolete")
+	public String projectObsolete(@PathVariable(name = "id")Long id, HttpSession httpSession, Model model) {
+		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
+			modifiedRepository.projectStatus(id, "obsolete");
+			return "redirect:/project";	
+		}else {
+			model.addAttribute("title","Unauthorized");
+			return "403";
+		}
+	}
+	@RequestMapping("project/{id}/delete")
+	public String projectDelete(@PathVariable(name = "id")Long id, HttpSession httpSession, Model model) {
+		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
+			modifiedRepository.projectDelete(id);
+			return "redirect:/project";			
+		}else {
+			model.addAttribute("title", "Unauthorized");
+			return "403";
+		}
 	}
 	
-
 }

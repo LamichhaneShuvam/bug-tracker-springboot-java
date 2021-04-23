@@ -1,41 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-<meta charset="ISO-8859-1">
-<title th:text="${title}"></title>
-<style type="text/css">
-	table {
-	border-collapse: collapse; 
-}
-</style>
-</head>
+<head th:replace="fragments :: html_head"></head>
 <body>
-	<h1 align="center">Bugs present in project: <span th:text="${project.getName}"></span></h1>
-		<h3>Project Id:  [[${projectId}]]</h3><!-- so this and the bellow thing is same-->
-		<h3>Project Description: [[${project.getDescription()}]]</h3>
-		<br>
-		<table border="2px">
-		<thead>
-			<tr>
-				<td>Bug Name</td>
-				<td>Bug Description</td>
-				<td>Severity</td>
-				<td>View</td>
-				<td sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">Assign</td>
-			</tr>
-		</thead>
-		<tr th:each="bug : ${bugList}">
-			<td th:text="${bug.name}">Bug name</td>
-			<td th:text="${bug.description}">Bug description</td>
-			<td th:text="${bug.severity}">Severity</td>
-			<td><a th:href="@{'/bugs/' + ${bug.id}+'/view'}">View Details</a></td>
-			<td sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
-				<a th:href="@{'/bug/'+${bug.id}+'/assignbug'}">Assign center</a>
-			</td>
-		</tr>
-	</table>
-
-	<h1><a th:href="@{'/project/'+${projectId}+'/bugs/add'}">Report a new Bug</a></h1>
+	<div class="d-flex" id="wrapper">
+		<div th:replace="fragments :: nav_side"></div>
+	  	<div id="page-content-wrapper">
+	  		<nav th:replace="fragments :: nav_top"></nav>
+			<div class="col-sm" style="padding-left: 20px; padding-top:20px;">
+            	<div class="card text-white bg-success mb-3" style="max-width: 40rem;">
+              		<div class="card-header">Project Detail</div>
+              			<div class="card-body">
+                			<h5 class="card-title">Project id:  [[${projectId}]]</h5>
+                			<h5 class="card-title">Project name: <span th:text="${project.getName}"></span></h5>
+                			<h5 class="card-title">Project description: [[${project.getDescription()}]]</h5>
+              			</div>
+            		</div>
+          		</div>
+	  		<div class="container-fluid">
+		  		<table class="table table-striped table-bordered  table-hover" style="max-width: 95%; margin-top: 20px;">
+					<thead class="table-dark">
+						<tr>
+							<td>Bug Name</td>
+							<td>Bug Description</td>
+							<td>Severity</td>
+							<td>Report time</td>
+							<td sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">User</td>
+							<td align="center">Action</td>
+							
+						</tr>
+					</thead>
+					<tr th:each="bug : ${bugList}">
+						<td th:text="${bug.name}" style="width: 200px;">Bug name</td>
+						<td th:text="${bug.description}"  style="width: 500px;">Bug description</td>
+						<td th:text="${bug.severity}">Severity</td>
+						<td  style="width: 200px; font-size:14px;" th:text="${bug.reportTime}">Time</td>
+						<td sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">[[${bug.user.firstName}]]</td>
+						<td style="width:200px;" align="center">
+						
+							<a th:href="@{'/bugs/' + ${bug.id}+'/view'}" style="text-decoration: none;">
+								<span class="material-icons" data-bs-toggle="tooltip" title="View" style="color: green;">
+			                    	remove_red_eye
+			                    </span>
+							</a>
+							<a th:href="@{'/bug/'+${bug.id}+'/assignbug'}" style="text-decoration: none;" sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+								<span class="material-icons" data-bs-toggle="tooltip" title="Assign" style="color: orange;">
+									assignment_ind
+								</span>
+							</a>
+							<a th:href="@{'/project/'+${projectId}+'/bug/'+${bug.id}+'/complete'}" style="text-decoration: none;" sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+								<span class="material-icons" data-bs-toggle="tooltip" title="Completed" style="color: green;">
+									check_circle_outline
+								</span>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<h3 style="padding-left:20px;"><a th:href="@{'/project/'+${projectId}+'/bugs/add'}">Report a new Bug</a></h3>
+			<div class="container" style="padding-top:50px"  sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+				<h3>Project obsolete</h3>
+				<a th:href="@{'/project/'+${projectId}+'/obsolete'}"  data-bs-toggle="tooltip" title="Make project obsolete" class="btn btn-warning">Remove</a>
+				<p>Removes from the list of ongoing projects</p>
+			</div>
+			<div class="container-fluid" style="padding-top: 150px;" sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+				<h3>False report</h3>
+				<a th:href="@{'/project/'+${projectId}+'/delete'}" class="btn btn-danger" data-bs-toggle="tooltip" title="Delete Project">Delete</a>
+				<p>Cannot undo only perform for false reports</p>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments :: all_scripts"></div>
 </body>
 </html>

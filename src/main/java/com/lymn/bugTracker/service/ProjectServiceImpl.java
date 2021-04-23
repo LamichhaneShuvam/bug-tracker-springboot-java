@@ -19,7 +19,7 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Override
 	public List<Project> getAllProject() {
-		List<Project> projects = projectRepository.findAll();
+		List<Project> projects = projectRepository.findByStatus("ongoing");//instead of all do by status
 		return projects;
 	}
 	@Override

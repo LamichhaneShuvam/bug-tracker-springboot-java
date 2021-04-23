@@ -22,11 +22,14 @@ public class ModifiedRepository {
     
 	@Transactional
 	public void saveBug(Bug bug) {
-	    entityManager.createNativeQuery("INSERT INTO bug (name, description, project_id, severity) VALUES (?,?,?,?)")
+	    entityManager.createNativeQuery("INSERT INTO bug (name, description, project_id, severity, report_time, user_id, status) VALUES (?,?,?,?,?,?,?)")
 	      .setParameter(1, bug.getName())
 	      .setParameter(2, bug.getDescription())
 	      .setParameter(3, bug.getProject().getId())
 	      .setParameter(4, bug.getSeverity())
+	      .setParameter(5, bug.getReportTime())
+	      .setParameter(6, bug.getUser())//
+	      .setParameter(7, bug.getStatus())
 	      .executeUpdate();
 	}
 	
@@ -54,26 +57,33 @@ public class ModifiedRepository {
 			return false;
 		}
 	}
-	
+	//edit this add not completed
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<Bug> findBugByUserId(Long projectId, Long userId){
-		return entityManager.createNativeQuery("SELECT bug.id, bug.description, bug.name, bug.project_id, bug.severity FROM bug "
+		return entityManager.createNativeQuery("SELECT bug.id, bug.description, bug.name, bug.project_id, bug.severity, bug.report_time, bug.user_id, bug.status FROM bug "
 				+ "JOIN users_bugs ON bug.id = users_bugs.bug_id "
 				+ "JOIN user ON users_bugs.user_id = user.id "
-				+ "WHERE user.id = ?1 AND bug.project_id = ?2", Bug.class)
+				+ "WHERE user.id = ?1 AND bug.project_id = ?2 AND bug.status = 'ongoing'", Bug.class)//added ongoing
 				.setParameter(1, userId)
 				.setParameter(2, projectId)
 				.getResultList();
 	}
-	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Bug> findBugByStatus(Long projectId, String status){
+		return entityManager.createNativeQuery("SELECT * from bug WHERE bug.project_id = ?1 AND bug.status = ?2",Bug.class)
+				.setParameter(1, projectId)
+				.setParameter(2, status)
+				.getResultList();
+	}
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<Project> findProjectByUserId(Long userId){
-		 return entityManager.createNativeQuery("SELECT project.id, project.description, project.name FROM project "
+		 return entityManager.createNativeQuery("SELECT project.id, project.description, project.name, project.status FROM project "
 				+ "JOIN users_projects on project.id = users_projects.project_id "
 				+ "JOIN user on users_projects.user_id = user.id "
-				+ "WHERE user.id = ?", Project.class)
+				+ "WHERE user.id = ? AND project.status = 'ongoing'", Project.class)
 				.setParameter(1, userId)
 				.getResultList();
 		
@@ -87,11 +97,24 @@ public class ModifiedRepository {
 	      .setParameter(2, bugId)
 	      .executeUpdate();
 	}
-	
+	@Transactional
+	public void removeBugAuthority(Long bugId, Long userId) {
+		entityManager.createNativeQuery("DELETE from users_bugs where user_id = ?1 and bug_id = ?2")
+	      .setParameter(1, userId)
+	      .setParameter(2, bugId)
+	      .executeUpdate();
+	}
 	
 	@Transactional
 	public void saveProjectAuthority(Long projectId, Long userId) {
 		entityManager.createNativeQuery("INSERT INTO users_projects (user_id, project_id) VALUES (?,?)")
+	      .setParameter(1, userId)
+	      .setParameter(2, projectId)
+	      .executeUpdate();
+	}
+	@Transactional
+	public void removeProjectAuthority(Long projectId, Long userId) {
+		entityManager.createNativeQuery("DELETE from users_projects where user_id = ?1 and project_id = ?2")
 	      .setParameter(1, userId)
 	      .setParameter(2, projectId)
 	      .executeUpdate();
@@ -229,6 +252,15 @@ public class ModifiedRepository {
 	      .executeUpdate();
 	}
 	
+	@Transactional
+	public void bugStatus(Long bugId,String status) {
+		entityManager.createNativeQuery("Update bug SET status = ?1 "
+				+ "where id = ?2")
+		.setParameter(1, status)
+		.setParameter(2, bugId)
+		.executeUpdate();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<ProjectViewDto> viewEditUserRoles(){
@@ -246,5 +278,26 @@ public class ModifiedRepository {
 			userList.add(projectViewDto);		
 		}
 		return userList;
+	}
+	@Transactional
+	public void bugDelete(Long bugId) {
+		entityManager.createNativeQuery("DELETE from bug WHERE id = ?1")
+		.setParameter(1, bugId)
+		.executeUpdate();
+		
+	}
+	@Transactional
+	public void projectStatus(Long projectId, String status) {
+		entityManager.createNativeQuery("UPDATE project SET status = ?1 WHERE id = ?2")
+		.setParameter(1, status)
+		.setParameter(2, projectId)
+		.executeUpdate();
+	}
+	@Transactional
+	public void projectDelete(Long projectId) {
+		entityManager.createNativeQuery("DELETE from project WHERE id = ?1")
+		.setParameter(1, projectId)
+		.executeUpdate();
+		
 	}
 }
