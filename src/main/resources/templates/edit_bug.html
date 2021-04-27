@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: html_head"></head>
+<body>
+	<div class="d-flex" id="wrapper">
+		<div th:replace="fragments :: nav_side"></div>
+	  	<div id="page-content-wrapper">
+	  		<nav th:replace="fragments :: nav_top"></nav>
+	  		<div class="container-fluid">
+	  			<h3>Edit bug:</h3>
+				<form th:action="@{'/project/'+${projectId}+'/bug/'+${bugId}+'/edit/save'}" style="margin-top:30px;">
+					<input type="text" name="name" class="form-control" placeholder="Change Bug Name" required>
+					<textarea name="description" class="form-control" placeholder="Change Description" rows="6" cols="50" required  style="margin-top:10px;"></textarea>
+					<label  style="margin-top:10px;">Select Severity: </label>
+					<select name="severity" class="form-control">
+  						<option value="normal">Normal</option>
+			  			<option value="moderate">Moderate</option>
+			  			<option value="critical">Critical</option>
+					</select>
+					<input type="submit" value="submit"  style="margin-top:10px;">
+				</form>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments :: all_scripts"></div>
+</body>
+</html>

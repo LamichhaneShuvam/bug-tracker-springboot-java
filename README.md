@@ -14,12 +14,13 @@
             * ongoing
             * obsolete
         * Both have deletion option
+        * Both have edition option
     * Add role addition in user registration 
 
 ### Remaining Functionality
-    * Complete and incomplete section in Bug
     * Add proper index page
     * Custom login and logout
+    * A million other things
 
 *ps-* **Fourth Commit**
 

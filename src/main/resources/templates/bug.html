@@ -53,6 +53,11 @@
 									check_circle_outline
 								</span>
 							</a>
+							<a th:href="@{'/project/'+${projectId}+'/bug/'+${bug.id}+'/edit'}"  style="text-decoration: none;" sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+								<span class="material-icons" data-bs-toggle="tooltip" title="Edit" style="color: black;">
+									settings
+								</span>
+							</a>
 						</td>
 					</tr>
 				</table>

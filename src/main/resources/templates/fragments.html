@@ -47,11 +47,12 @@
       <div class="list-group list-group-flush">
         <a th:href="@{/dashboard}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
         <a th:href="@{/project}" class="list-group-item list-group-item-action bg-light">Project</a>
+        <a th:href="@{/project/obsolete}" class="list-group-item list-group-item-action bg-light">Obsolete Projects</a>
         <a th:href="@{/project/add}" class="list-group-item list-group-item-action bg-light"  sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">New Project</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Help</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Fork on github</a>
-        <h6 id="date">Today: </h6>
+        <a th:href="@{/setting}" class="list-group-item list-group-item-action bg-light">Settings</a>
+        <a th:href="@{/completed/bugs}" class="list-group-item list-group-item-action bg-light">Completed Bugs</a>
+        <a th:href="@{/users}" class="list-group-item list-group-item-action bg-light"  sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">Users List</a>
+        <h6 id="date" style="position: absolute;bottom: 12px;left:0;">Today: </h6>
       </div>
     </div>
     
@@ -90,14 +91,14 @@
                 <a class="nav-link" th:href="@{/dashboard}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Source Code</a>
+                <a class="nav-link" href="https://github.com/LamichhaneShuvam/BugTracker" target="_blank">Source Code</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Welcome, [[${session.userName}]]
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Help</a></li>
+                  <li><a class="dropdown-item" th:href="@{/setting}">Settings</a></li>
                   <li><div class="dropdown-divider"></div></li>
                   <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
                 </ul>

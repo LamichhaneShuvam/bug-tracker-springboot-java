@@ -79,6 +79,12 @@ public class ModifiedRepository {
 	}
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<Bug> findBugByCompletedStatus(){
+		return entityManager.createNativeQuery("SELECT * from bug WHERE bug.status = 'completed'",Bug.class)
+				.getResultList();
+	}
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<Project> findProjectByUserId(Long userId){
 		 return entityManager.createNativeQuery("SELECT project.id, project.description, project.name, project.status FROM project "
 				+ "JOIN users_projects on project.id = users_projects.project_id "
@@ -300,4 +306,48 @@ public class ModifiedRepository {
 		.executeUpdate();
 		
 	}
+	@Transactional
+	public String getOldPassword(Long user) {
+		return entityManager.createNativeQuery("select password from user where id = ?1")
+		.setParameter(1, user)
+		.getSingleResult().toString();
+	}
+	@Transactional
+	public void setNewPassword(Long id, String password) {
+		entityManager.createNativeQuery("UPDATE user SET password = ?1 WHERE id = ?2")
+		.setParameter(1, password)
+		.setParameter(2, id)
+		.executeUpdate();
+		
+	}
+	@Transactional
+	public void setNewEmail(Long id, String email) {
+		entityManager.createNativeQuery("UPDATE user SET email = ?1 WHERE id = ?2")
+		.setParameter(1, email)
+		.setParameter(2, id)
+		.executeUpdate();
+		
+	}
+	@Transactional
+	public void editBug(Long bugId, String name, String description, String severity) {
+		entityManager.createNativeQuery("UPDATE bug set name = ?1, description = ?2, severity=?3 "
+				+ "WHERE id = ?4")
+		.setParameter(1, name)
+		.setParameter(2, description)
+		.setParameter(3, severity)
+		.setParameter(4, bugId)
+		.executeUpdate();
+		
+	}
+	
+//	@Transactional
+//	public  getTopReported() {
+//		return entityManager.createNativeQuery("SELECT user_id "
+//				+ "from bug "
+//				+ "group by user_id "
+//				+ "order by count(*) desc "
+//				+ "limit 1")
+//				.getResultList().get(0);
+//	}
+	
 }

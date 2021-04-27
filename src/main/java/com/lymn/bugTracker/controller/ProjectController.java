@@ -78,10 +78,33 @@ public class ProjectController {
 			return "403";
 		}
 	}
+	@RequestMapping(path = "/project/obsolete")
+	public String projectObsoleteView(Model model,Authentication authentication, HttpSession httpSession) {
+		
+		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
+			model.addAttribute("title", "Obsolete Projects");
+			model.addAttribute("projectList", projectRepository.findByStatus("obsolete"));	
+			return "obsolete_project";
+		} else {
+			model.addAttribute("title","unauthorized access");
+			return "403";
+		}
+	}
+	
 	@RequestMapping("/project/{id}/obsolete")
 	public String projectObsolete(@PathVariable(name = "id")Long id, HttpSession httpSession, Model model) {
 		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
 			modifiedRepository.projectStatus(id, "obsolete");
+			return "redirect:/project";	
+		}else {
+			model.addAttribute("title","Unauthorized");
+			return "403";
+		}
+	}
+	@RequestMapping("/project/{id}/ongoing")
+	public String projectOngoing(@PathVariable(name = "id")Long id, HttpSession httpSession, Model model) {
+		if(httpSession.getAttribute("role").equals("ADMIN")||httpSession.getAttribute("role").equals("MANAGER")) {
+			modifiedRepository.projectStatus(id, "ongoing");
 			return "redirect:/project";	
 		}else {
 			model.addAttribute("title","Unauthorized");

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: html_head"></head>
+<body>
+	  <div class="d-flex" id="wrapper">
+	  	<div th:replace="fragments :: nav_side"></div>
+	  	
+	  	<div id="page-content-wrapper">
+	  		<nav th:replace="fragments :: nav_top"></nav>
+	  		<div class="container-fluid">
+	  			<h3>Obsolete projects</h3>
+	  		</div>
+	  		<div class="container-fluid">
+		  		<table class="table table-striped table-bordered  table-hover" style="max-width: 90%; margin-top: 20px;">
+					<thead class="table-dark">
+						<tr>
+							<td>Project Id</td>
+							<td>Project Name</td>
+							<td>Project Description</td>
+							<td>Project Status</td>
+							<td align="center">Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="project : ${projectList}">
+							<td th:text="${project.id}" style="width: 100px;">project Id</td>
+							<td th:text="${project.name}" style="width: 200px;">project name</td>
+							<td th:text="${project.description}" style="width: 500px;">project description</td>
+							<td th:text="${project.status}" style="width: 200px;">project status</td>
+							<td style="width:200px;" align="center">
+								<a th:href="@{'/project/'+${project.id}+'/ongoing'}" style="text-decoration: none;" sec:authorize="hasAnyAuthority('ADMIN','MANAGER')">
+									<span class="material-icons" data-bs-toggle="tooltip" title="Make ongoing" style="color: green;">
+										check_circle_outline
+									</span>
+								</a>
+						
+							</td>
+						</tr>
+					</tbody>
+				</table>	
+	  		</div>
+	  	</div>
+	  </div>
+	<div th:replace="fragments :: all_scripts"></div>
+</body>
+</html>
