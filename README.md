@@ -20,7 +20,6 @@
 ### Remaining Functionality
     * Add proper index page
     * Custom login and logout
-    * A million other things
 
 *ps-* **Sixth Commit** 
 ###### Total Commit says 8 because of random changes to the readme file :metal:
